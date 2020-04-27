@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">1, 2, 3 Comté</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="close_application">Fermer l\'application</string>
+    <string name="alert_user_pseudo">Entrez votre pseudo (Définitif)</string>
+    <string name="validate">valider</string>
+    <string name="error_edit_text">Remplissez le champ correctement</string>
+    <string name="error_need_only_lowercase_and_digits">Uniquement des minuscule, majuscules et des chiffres</string>
+    <string name="create_form_title">Création de compteur</string>
+    <string name="hint_compteur_name">Nom du compteur</string>
+    <string name="hint_player_name">Noms des joueurs</string>
+    <string name="hint_player1">Joueur 1</string>
+    <string name="compteur_last_modified">Compteur date</string>
+
+</resources>

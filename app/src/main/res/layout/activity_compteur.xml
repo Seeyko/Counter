@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        android:layout_alignParentTop="true"
+        app:title="Nom du compteur" />
+
+    <TextView
+        android:id="@+id/compteur_total_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:text="Total : 25" />
+
+    <com.valentinegilliocq.compteur.compteur.CompteurFlexboxLayout
+        android:id="@+id/players_buttons_flexbox_layout"
+        android:layout_below="@id/compteur_total_text"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:flexWrap="wrap"
+        app:flexDirection="column">
+
+    </com.valentinegilliocq.compteur.compteur.CompteurFlexboxLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:id="@+id/progressBar"
+        android:layout_height="match_parent"
+        android:background="#7C000000">
+
+        <ProgressBar
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+    </FrameLayout>
+</RelativeLayout>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "292595319303",
+    "firebase_url": "https://simple-counter-66a16.firebaseio.com",
+    "project_id": "simple-counter-66a16",
+    "storage_bucket": "simple-counter-66a16.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292595319303:android:33b4ee30871ad04c4ee0a2",
+        "android_client_info": {
+          "package_name": "com.valentinegilliocq.compteur"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "292595319303-p52989aph6m97c1a6g3mt5pbb3ldu1fs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsz4oYIHbYTY4H5RsU_BsqxlIZFgFTgb8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "292595319303-p52989aph6m97c1a6g3mt5pbb3ldu1fs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
