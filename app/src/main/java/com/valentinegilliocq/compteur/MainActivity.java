@@ -1,14 +1,17 @@
 package com.valentinegilliocq.compteur;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -19,6 +22,7 @@ import com.valentinegilliocq.compteur.compteur.CompteurActivity;
 import com.valentinegilliocq.compteur.compteur.CompteurAdapter;
 import com.valentinegilliocq.compteur.compteur.CreateCompteurFormActivity;
 import com.valentinegilliocq.compteur.database.CompteurManager;
+import com.valentinegilliocq.compteur.user.UserHelper;
 import com.valentinegilliocq.compteur.utils.AppUtils;
 
 import androidx.annotation.NonNull;
@@ -29,12 +33,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.UserHandle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AbsListView;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        setTitle(" ");
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,8 +82,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.compteur_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         list = new ArrayList<>();
-        productAdapter = new CompteurAdapter(getApplicationContext(), list);
+        productAdapter = new CompteurAdapter(this, list);
         recyclerView.setAdapter(productAdapter);
+
     }
 
     private void setupCompteurList() {
@@ -200,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                         edittext.setError(getResources().getString(R.string.error_edit_text));
                         return;
                     }
-                    String pseudo = edittext.getText().toString();
+                    final String pseudo = edittext.getText().toString();
 
                     Pattern p = Pattern.compile("[^a-zA-Z0-9]");
                     Matcher m = p.matcher(pseudo);
@@ -211,10 +218,58 @@ public class MainActivity extends AppCompatActivity {
                         return;
                     }
 
+                    final ProgressDialog progressDialog = ProgressDialog.show(MainActivity.this, "",
+                            getString(R.string.checking_pseudo), true);
+                    progressDialog.show();
+                    UserHelper.checkUniquePseudo(pseudo)
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    progressDialog.dismiss();
+                                    if (task.isSuccessful()) {
+                                        if (!task.getResult().isEmpty()) {
+                                            edittext.setError(getResources().getString(R.string.error_pseudo_already_taken));
+                                        } else {
+                                            final ProgressDialog progressDialog2 = ProgressDialog.show(MainActivity.this, "",
+                                                    getString(R.string.creating_user), true);
+                                            progressDialog2.show();
+                                            UserHelper.createPseudo(pseudo)
+                                                    .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                            progressDialog2.dismiss();
+                                                            if(task.isSuccessful()) {
+                                                                getSharedPreferences(USER_PREF, MODE_PRIVATE).edit().putString(USER_PSEUDO_KEY, pseudo).commit();
+                                                                dialog.dismiss();
+                                                                setupCompteurList();
+                                                            }else{
+                                                                edittext.setError(getString(R.string.error_network));
+                                                            }
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            progressDialog2.dismiss();
+                                                            edittext.setError(getString(R.string.error_network));
+                                                        }
+                                                    });
+
+                                        }
+                                    } else {
+                                        edittext.setError(getResources().getString(R.string.error_network));
+                                    }
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    progressDialog.dismiss();
+                                    edittext.setError(getResources().getString(R.string.error_network));
+                                }
+                            });
                     // if every thing is Ok then dismiss dialog
-                    getSharedPreferences(USER_PREF, MODE_PRIVATE).edit().putString(USER_PSEUDO_KEY, pseudo).commit();
-                    dialog.dismiss();
-                    setupCompteurList();
+
                 }
             });
         } else {
@@ -225,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 

@@ -10,25 +10,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="?attr/colorPrimary"
+        android:background="?attr/colorPrimaryVariant"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
         app:title="@string/create_form_title" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/validate_form"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:src="@drawable/ic_done" />
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_done"
+        android:tint="?attr/colorOnSecondary"
+        app:backgroundTint="?attr/colorSecondary" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -69,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:src="@android:drawable/ic_menu_add"
-                android:tint="@color/green" />
+                android:tint="?attr/colorPrimaryVariant" />
 
             <ImageButton
                 android:id="@+id/remove_player"
@@ -77,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:src="@android:drawable/ic_menu_close_clear_cancel"
-                android:tint="@color/red" />
+                android:tint="?attr/colorError" />
         </LinearLayout>
 
         <ScrollView

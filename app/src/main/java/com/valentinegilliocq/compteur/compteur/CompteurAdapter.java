@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.valentinegilliocq.compteur.R;
@@ -14,11 +15,11 @@ import java.util.List;
 
 public class CompteurAdapter extends RecyclerView.Adapter<CompteurViewHolder> {
     private List<Compteur> list;
-    private Context mContext;
+    private AppCompatActivity mActivity;
 
-    public CompteurAdapter(Context context, List<Compteur> list) {
+    public CompteurAdapter(AppCompatActivity activity, List<Compteur> list) {
         this.list = list;
-        this.mContext = context;
+        this.mActivity = activity;
     }
 
     @NonNull
@@ -30,7 +31,7 @@ public class CompteurAdapter extends RecyclerView.Adapter<CompteurViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull CompteurViewHolder holder, int position) {
-        holder.bind(mContext, list.get(position));
+        holder.bind(mActivity, list.get(position));
     }
 
 

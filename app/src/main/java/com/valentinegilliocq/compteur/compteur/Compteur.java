@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -134,4 +135,16 @@ public class Compteur {
 
     //endregion
 
+
+    @NonNull
+    @Override
+    public String toString() {
+        return getName()+ " : " + getCreatorPseudo() + " : " + getPlayersPseudo();
+    }
+
+    public void addPoint(String playerPseudo) {
+        List<Timestamp> timestampList = players.get(playerPseudo);
+        timestampList.add(Timestamp.now());
+        players.put(playerPseudo, timestampList);
+    }
 }

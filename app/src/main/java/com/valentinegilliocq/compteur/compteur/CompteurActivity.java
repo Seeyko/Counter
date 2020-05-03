@@ -7,8 +7,12 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -21,6 +25,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.tomandrieu.utilities.SeeykoUtils;
 import com.valentinegilliocq.compteur.R;
 import com.valentinegilliocq.compteur.database.CompteurManager;
 import com.valentinegilliocq.compteur.utils.AppUtils;
@@ -35,17 +40,18 @@ public class CompteurActivity extends AppCompatActivity {
     private String compteurId;
     private View progressBar;
     private Compteur compteur;
-    private CompteurFlexboxLayout playersButtonsLayout;
+    private GridView playersBoxLayout;
     private TextView compteurTotal;
+    private Toolbar toolbar;
+    private PlayerButtonAdapter playerButtonAdapter;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compteur);
         compteurId = getIntent().getExtras().getString(EXTRA_UID);
         this.progressBar = findViewById(R.id.progressBar);
-        this.playersButtonsLayout = findViewById(R.id.players_buttons_flexbox_layout);
+        this.playersBoxLayout = findViewById(R.id.players_box_layout);
         this.compteurTotal = findViewById(R.id.compteur_total_text);
         compteur = null;
 
@@ -57,11 +63,11 @@ public class CompteurActivity extends AppCompatActivity {
         CompteurManager.getCompteur(compteurId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if(documentSnapshot.exists()){
-                    if(compteur == null){
+                if (documentSnapshot.exists()) {
+                    if (compteur == null) {
                         compteur = documentSnapshot.toObject(Compteur.class);
                         createUI();
-                    }else{
+                    } else {
                         compteur = documentSnapshot.toObject(Compteur.class);
                         updateUI();
                     }
@@ -71,9 +77,10 @@ public class CompteurActivity extends AppCompatActivity {
     }
 
     private void createUI() {
+        Log.e("=>", "createUI : " + compteur.toString());
         AppUtils.fadeView(progressBar, View.GONE, 0F, 500);
 
-        setTitle(compteur.getName());
+        toolbar.setTitle(compteur.getName());
 
         createPlayersButtons();
         updatePlayersScore();
@@ -81,6 +88,7 @@ public class CompteurActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
+        Log.e("=>", "updateUI : " + compteur);
         updatePlayersScore();
         updateTotal();
     }
@@ -91,46 +99,35 @@ public class CompteurActivity extends AppCompatActivity {
         //Initialisé ce layout avec le nom du joueur : TextView (R.id.name)
         //Ajouter un click listener qui appellera la méthode addPoint()
         //Ajouter ce layout a ton flexboxlayout et à une List de layout pour les garder en mémoire et les mettres à jour
-        for (Map.Entry<String, List<Timestamp>> player : compteur.getPlayers().entrySet()) {
-            String playerPseudo = player.getKey();
-            List<Timestamp> playerTemps = player.getValue();
-            int playerScore = playerTemps.size();
-
-            PlayerCompteurButtonView playerCompteurButtonView = new PlayerCompteurButtonView(this, playerPseudo, playerScore);
-            playerCompteurButtonView.addToParent(playerCompteurButtonView);
-
-        }
+        playerButtonAdapter = new PlayerButtonAdapter(this, compteur.getPlayers());
+        this.playersBoxLayout.setAdapter(playerButtonAdapter);
+        this.playersBoxLayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                addPoint(playerButtonAdapter.getPseudo(position));
+            }
+        });
     }
-
 
 
     private void updatePlayersScore() {
         //Pour chaque boutons de ta List de layout (qui correspond a chaque joueur de ton compteur)
         //Mettre à jour son score : TextView (R.id.score)
-        for (Map.Entry<String, List<Timestamp>> player : compteur.getPlayers().entrySet()) {
-            String playerPseudo = player.getKey();
-            List<Timestamp> playerTemps = player.getValue();
-            int playerScore = playerTemps.size();
-
-            PlayerCompteurButtonView playerCompteurButtonView = new PlayerCompteurButtonView(this, playerPseudo, playerScore);
-//            playersButtonsLayout.updateChild(playerCompteurButtonView);
-        }
+        playerButtonAdapter.update(compteur.getPlayers());
+        updateTotal();
     }
 
     private void updateTotal() {
         TextView totalScoreView = findViewById(R.id.compteur_total_text);
-        totalScoreView.setText("Total : ");
+        totalScoreView.setText("Total : " + playerButtonAdapter.getScoreTotal());
     }
 
-    private int addPoint(int nbPoint, AppCompatTextView textScore) {
-        nbPoint++;
-        textScore.setText(String.valueOf(nbPoint));
-        Log.e("nbPoint", String.valueOf(nbPoint));
-        return nbPoint;
+    private void addPoint(String playerPseudo) {
+        CompteurManager.addPoint(compteur, playerPseudo);
     }
 
     private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

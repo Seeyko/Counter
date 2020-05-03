@@ -2,21 +2,48 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:editTextColor">?attr/colorOnBackground</item>
+        <item name="android:textColorPrimary">?attr/colorOnBackground</item>
+        <item name="android:textColorSecondary">?attr/colorOnBackground</item>
+        <item name="android:textColorTertiary">?attr/colorOnBackground</item>
+        <item name="android:textColorPrimaryInverse">?attr/colorOnPrimary</item>
+        <item name="android:textColorSecondaryInverse">?attr/colorOnPrimary</item>
+        <item name="android:textColorTertiaryInverse">?attr/colorOnPrimary</item>
+        <item name="colorButtonNormal">?attr/colorSurface</item>
+        <item name="android:itemBackground">?attr/backgroundColor</item>
+        <item name="android:textColorHint">?attr/colorOnBackground</item>
+        <item name="colorControlActivated">?attr/colorSecondary</item>
+        <item name="android:windowBackground">?attr/backgroundColor</item>
+        <item name="iconTint">?attr/colorOnPrimary</item>
+
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="CompteurTheme" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/greenDark</item>
+        <item name="colorPrimaryVariant">@color/greenLight</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">@color/yellowMustard</item>
+        <item name="colorSecondaryVariant">@color/yellowMustardDark</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <item name="colorError">@color/red</item>
+        <item name="colorOnError">@color/black</item>
+
+        <item name="backgroundColor">@color/white</item>
+        <item name="colorOnBackground">@color/black</item>
+
+    </style>
+
+    <style name="CompteurTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="CompteurTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="CompteurTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <color name="white">#FFFAFA</color>
 </resources>

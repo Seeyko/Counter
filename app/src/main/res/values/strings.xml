@@ -19,5 +19,10 @@
     <string name="hint_player_name">Noms des joueurs</string>
     <string name="hint_player1">Joueur 1</string>
     <string name="compteur_last_modified">Compteur date</string>
+    <string name="action_delete_compteur">Supprimer le compteur</string>
+    <string name="error_pseudo_already_taken">Pseudo déjà pris</string>
+    <string name="error_network">Erreur de réseau, réessayer</string>
+    <string name="checking_pseudo">Vérification du pseudo...</string>
+    <string name="creating_user">Création de votre pseudo...</string>
 
 </resources>

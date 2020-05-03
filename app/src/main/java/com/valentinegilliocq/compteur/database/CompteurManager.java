@@ -32,4 +32,9 @@ public class CompteurManager {
     public static Task<Void> deleteCompteur(String id){
         return getCollection().document(id).delete();
     }
+
+    public static Task<Void> addPoint(Compteur compteur, String playerPseudo) {
+        compteur.addPoint(playerPseudo);
+        return getCollection().document(compteur.getId()).set(compteur.toMap(), SetOptions.merge());
+    }
 }
